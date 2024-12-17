@@ -6,10 +6,12 @@ import json
 class TestSolution:
 
     url = "http://localhost:8000"
-    encoding = 'cp1251'
+    encoding = "cp1251"
 
     def parse_response_body(self, response):
-        return json.loads(response.content.decode(encoding=self.encoding).replace("\'", "\""))
+        return json.loads(
+            response.content.decode(encoding=self.encoding).replace("'", '"')
+        )
 
     @allure.title("GET: Проверка структуры ответа GET")
     def test_get(self):
@@ -17,7 +19,7 @@ class TestSolution:
 
         assert response.status_code == 200
 
-        values = response.content.decode(encoding=self.encoding).split(': ')
+        values = response.content.decode(encoding=self.encoding).split(": ")
         assert len(values) >= 2
         assert values[0] == "Команда"
 
@@ -28,10 +30,7 @@ class TestSolution:
             "b": -5,
             "c": 4,
         }
-        expected_response = {
-            "x1": '4',
-            "x2": '1'
-        }
+        expected_response = {"x1": 4, "x2": 1}
         response = requests.post(self.url, json=request_body)
         assert response.status_code == 200, "неверный статус код ответа"
 
@@ -45,15 +44,12 @@ class TestSolution:
             "b": -2,
             "c": 1,
         }
-        expected_response = {
-            "x1": '1',
-            "x2": '1'
-        }
+        expected_response = {"x1": 1, "x2": 1}
         response = requests.post(self.url, json=request_body)
         assert response.status_code == 200, "неверный статус код ответа"
 
         response_json_body = self.parse_response_body(response)
-        assert response_json_body ==  expected_response, "неверное тело ответа"
+        assert response_json_body == expected_response, "неверное тело ответа"
 
     @allure.title("POST: разные корни")
     def test_post_two_x_round(self):
@@ -62,10 +58,7 @@ class TestSolution:
             "b": -14,
             "c": -5,
         }
-        expected_response = {
-            "x1": '5',
-            "x2": '-0.33'
-        }
+        expected_response = {"x1": 5, "x2": -0.33}
         response = requests.post(self.url, json=request_body)
         assert response.status_code == 200, "неверный статус код ответа"
 
@@ -85,8 +78,9 @@ class TestSolution:
         response_json_body = self.parse_response_body(response)
         error_msg = response_json_body.get("error")
 
-        assert error_msg == "уравнение не имеет решений, дискриминант меньше нуля", \
-            "неверное сообщение об ошибке"
+        assert (
+            error_msg == "уравнение не имеет решений, дискриминант меньше нуля"
+        ), "неверное сообщение об ошибке"
 
     @allure.title("POST: нет параметра a")
     def test_post_no_a(self):
@@ -100,8 +94,7 @@ class TestSolution:
         response_json_body = self.parse_response_body(response)
         error_msg = response_json_body.get("error")
 
-        assert error_msg == "переданы не все параметры", \
-            "неверное сообщение об ошибке"
+        assert error_msg == "переданы не все параметры", "неверное сообщение об ошибке"
 
     @allure.title("POST: нет параметра b")
     def test_post_no_b(self):
@@ -115,8 +108,7 @@ class TestSolution:
         response_json_body = self.parse_response_body(response)
         error_msg = response_json_body.get("error")
 
-        assert error_msg == "переданы не все параметры", \
-            "неверное сообщение об ошибке"
+        assert error_msg == "переданы не все параметры", "неверное сообщение об ошибке"
 
     @allure.title("POST: нет параметра c")
     def test_post_no_c(self):
@@ -130,8 +122,7 @@ class TestSolution:
         response_json_body = self.parse_response_body(response)
         error_msg = response_json_body.get("error")
 
-        assert error_msg == "переданы не все параметры", \
-            "неверное сообщение об ошибке"
+        assert error_msg == "переданы не все параметры", "неверное сообщение об ошибке"
 
     @allure.title("POST: а=0")
     def test_post_a_is_zero(self):
@@ -146,5 +137,6 @@ class TestSolution:
         response_json_body = self.parse_response_body(response)
         error_msg = response_json_body.get("error")
 
-        assert error_msg == "произошла ошибка на стороне сервиса", \
-            "неверное сообщение об ошибке"
+        assert (
+            error_msg == "произошла ошибка на стороне сервиса"
+        ), "неверное сообщение об ошибке"
