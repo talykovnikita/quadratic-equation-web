@@ -36,7 +36,7 @@ class TestSolution:
         assert response.status_code == 200, "неверный статус код ответа"
 
         response_json_body = self.parse_response_body(response)
-        assert expected_response == response_json_body, "неверное тело ответа"
+        assert response_json_body == expected_response, "неверное тело ответа"
 
     @allure.title("POST: одинаковые корни")
     def test_post_one_x(self):
@@ -53,7 +53,7 @@ class TestSolution:
         assert response.status_code == 200, "неверный статус код ответа"
 
         response_json_body = self.parse_response_body(response)
-        assert expected_response == response_json_body, "неверное тело ответа"
+        assert response_json_body ==  expected_response, "неверное тело ответа"
 
     @allure.title("POST: разные корни")
     def test_post_two_x_round(self):
@@ -70,7 +70,7 @@ class TestSolution:
         assert response.status_code == 200, "неверный статус код ответа"
 
         response_json_body = self.parse_response_body(response)
-        assert expected_response == response_json_body, "неверное тело ответа"
+        assert response_json_body == expected_response, "неверное тело ответа"
 
     @allure.title("POST: дискрименант меньше нуля")
     def test_post_d_lt_zero(self):

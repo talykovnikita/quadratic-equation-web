@@ -4,15 +4,19 @@ import json
 
 class HttpGetHandler(BaseHTTPRequestHandler):
 
+    charset = "cp1251"
+
     """Обработчик GET запросов"""
     def do_GET(self):
         self._send_text_response(201, "Привет, мир!")
 
     """Обработчик POST запросов"""
     def do_POST(self):
-        input_body = self._parse_input_body()
+        input_params = self._parse_input_body()
 
-        self._send_json_response(200, {"x1": 0, "x2": 0})
+        self._send_json_response(200, {"a": input_params[0],
+                                                                "b": input_params[1],
+                                                                "c": input_params[2]})
 
     """Вспомогательный метод для парсинга тела запросов"""
     def _parse_input_body(self):
@@ -30,21 +34,21 @@ class HttpGetHandler(BaseHTTPRequestHandler):
 
         # Установка заголовков
         self.send_header("Content-type", "text/plain")
-        self.send_header("charset", "cp1251")
+        self.send_header("charset", self.charset)
 
         # Добавляет пустую строку после заголовков - требование стандарта http
         self.end_headers()
 
         # Установка тела ответа
-        self.wfile.write(response_body.encode('cp1251'))
+        self.wfile.write(response_body.encode(self.charset))
 
     """Вспомогательный метод для отправки ответа в виде JSON"""
     def _send_json_response(self, status_code, response_body):
         self.send_response(status_code)
         self.send_header("Content-type", "text/json")
-        self.send_header("charset", "cp1251")
+        self.send_header("charset", self.charset)
         self.end_headers()
-        self.wfile.write(str(response_body).encode(encoding='cp1251'))
+        self.wfile.write(str(response_body).encode(encoding=self.charset))
 
 
 

@@ -1,6 +1,6 @@
 from http.server import HTTPServer
 from HttpHandler import HttpGetHandler
-from HttpHandlerReady import HttpGetHandlerReady
+# from HttpHandlerReady import HttpGetHandlerReady
 
 
 def run(server_class=HTTPServer, handler_class=HttpGetHandler):
