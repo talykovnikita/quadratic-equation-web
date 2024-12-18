@@ -1,5 +1,4 @@
 pytest
-allure
 allure-pytest
 requests
 flake8
